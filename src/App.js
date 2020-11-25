@@ -26,9 +26,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   // const [userInformation, setUserInformation] = useState({});
 
+
   useEffect(() => {
-    if(!firebase.apps.length) {
-      firebaseConfig.initializeApp(firebaseConfig);
+
+    if (!firebase.apps.length) {
+
+      firebase.initializeApp(firebaseConfig);
     }
   }, [firebaseConfig])
 
@@ -61,7 +64,7 @@ function App() {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(function(response) {
+      .then(function (response) {
         console.log('VALID ACCOUNT CREATED FOR:', email, response);
         setLoggedIn(true);
       })
