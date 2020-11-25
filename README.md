@@ -69,3 +69,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 # DW-exercise-5
+
+
+# steps 
+
+
+# steps 
+
+1. login to firebase 
+2. create new project (exercise 5)
+3. add firebase package to create react app (npm install firebase)
+4. enable athentication on firebase and allow email/password
+5. add firebase pacakge into app.js
+6. add web app to firebase (SEttings -> general -> add app)
+7. copy config to code 
+8. put api key in env 

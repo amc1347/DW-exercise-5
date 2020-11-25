@@ -1,9 +1,14 @@
 import React from 'react';
+import LoginForm from '../components/LoginForm';
 
-function Login() {
+function Login({LoginFunction}) {
     return (
-        <div></div>
-    )
-}
+        <div>
+            <h1>Login</h1>
+            <LoginForm LoginFuncion={LoginFunction} />
+        </div>
+        );
+    }
+    
 
 export default Login;
