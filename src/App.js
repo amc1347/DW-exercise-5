@@ -10,6 +10,7 @@ import CreateAccount from './containers/CreateAccount';
 import UserProfile from './containers/UserProfile';
 
 import Header from "./components/Header";
+import userEvent from "@testing-library/user-event";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -24,7 +25,7 @@ const firebaseConfig = {
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  // const [userInformation, setUserInformation] = useState({});
+  const [userInformation, setUserInformation] = useState({});
 
 
   useEffect(() => {
@@ -34,6 +35,20 @@ function App() {
       firebase.initializeApp(firebaseConfig);
     }
   }, [firebaseConfig])
+
+useEffect(() => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    console.log({user})
+    if(user) {
+      // user is logged in
+      setLoggedIn(true);
+      setUserInformation(user);
+    } else {
+      setLoggedIn(false);
+    }
+    setLoading(false);
+  })
+}, [])
 
   function LoginFunction(e) {
     e.preventDefault();
@@ -53,7 +68,16 @@ function App() {
   }
 
   function LogoutFunction() {
-
+    firebase
+    .auth()
+    .signOut()
+    .then(function() {
+      setLoggedIn(false);
+      // setUserInformation(user)
+    })
+    .catch(function (error) {
+      console.log("LOGOUT ERROR", error);
+    })
   }
 
   function CreateAccountFunction(e) {
@@ -72,21 +96,35 @@ function App() {
         console.log('ACCOUNT CREATION FAILED', error);
       })
   }
-  console.log({ loggedIn });
+  console.log({userInformation});
+
+  if(loading) return null;
 
   return (
   <div className="App">
     <Header loggedIn={loggedIn} LogoutFunction={LogoutFunction}/>
     <Router> 
       <Route exact path="/login">
-        <Login LoginFunction={LoginFunction}/>
+        {/* If someone is logged in, do not take them to login page - take them to user profile */}
+        {!loggedIn ? (
+                <Login LoginFunction={LoginFunction}/>
+        ) : (
+            <Redirect to="/" />
+        )}
       </Route>
       <Route exact path="/create-account">
+        {/* if someone is logged in, do not take htem to create account page - take them to user profile */}
+        {!loggedIn ? (
         <CreateAccount CreateAccountFunction={CreateAccountFunction}/>
+        ) : (
+          <Redirect to="/" />
+      )}
       </Route>
       <Route exact path="/">
-        <UserProfile />
-      </Route>
+      {!loggedIn ? (
+      <Redirect to="/login" /> 
+      ) : ( <UserProfile userInformation={userInformation} /> )} 
+        </Route>
     </Router>
     </div>
   );
